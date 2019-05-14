@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+        <title>Hello!</title>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <!-- import the webpage's stylesheet -->
+        <link rel="stylesheet" href="lib/css/style.css">
+        <!-- Load the Paper.js library -->
+        <script type="text/javascript" src="lib/js/paper-full.js"></script>
+        <!-- Load the howler.js library -->  
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/howler/2.1.2/howler.js"></script>
+        <script src="lib/js/script.js"></script>
+        <!-- Define inlined PaperScript associate it with myCanvas -->
+        <script type="text/paperscript" canvas="myCanvas">
+            var circles = [];
+            
+            function onFrame(event) {
+                for (var i = 0; i < circles.length; i++) {
+                    circles[i].fillColor.hue += .5;
+                    circles[i].scale(.95);
+                    if (circles[i].matrix._d < 0.001) {
+                      circles[i].remove();
+                      circles.pop(i);
+                      console.log("return empty circles array");
+                      console.log(circles);
+                    }
+                }
+            }
+            
+            tool.onKeyDown = function(event) {     
+                if (keyData[event.key]) {
+                    var maxPoint = new Point(view.size.width, view.size.height); 
+                    var randomPoint = Point.random();
+                    var point = maxPoint * randomPoint;
+                    var circle = new Shape.Circle(point, 500);
+                    circle.fillColor = keyData[event.key].color;
+                    keyData[event.key].sound.play();
+                    circles.push(circle);    
+                }  
+                console.log("a key has been pressed");
+            }
+        </script>
+        <!-- import the webpage's javascript file -->
+        <script src="lib/js/script.js"></script>
+    </head>  
+    <body>
+        <canvas id="myCanvas" resize></canvas>
+    </body>
+</html>
